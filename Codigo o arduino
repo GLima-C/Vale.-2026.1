@@ -1,0 +1,49 @@
+const int trigPin = 9;    // Trigger do sensor HC-SR04
+const int echoPin = 10;   // Echo do sensor HC-SR04
+const int ledPin = 7;     // LED no pino 7
+const int buzzerPin = 6;  // Buzzer no pino 6
+
+long duration;
+int distance;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Limpa o trigger
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  
+  // Envia pulso ultrassônico
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Lê o tempo de retorno do eco
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Calcula a distância em cm
+  distance = duration * 0.034 / 2;
+  
+  // Mostra no Monitor Serial
+  Serial.print("Distancia: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+  
+  // Se objeto a 20 cm ou menos: acende LED e liga buzzer
+  if (distance <= 20 && distance > 0) {
+    digitalWrite(ledPin, HIGH);
+    digitalWrite(buzzerPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+    digitalWrite(buzzerPin, LOW);
+  }
+  
+  delay(100);
+}
+
